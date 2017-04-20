@@ -10,7 +10,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TestController {
+// controller class mère : méthode render()
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+
+class TestController extends Controller{
 
   /**
    *
@@ -18,7 +22,12 @@ class TestController {
    *
    */
   public function indexAction(Request $request){
-    return new Response("coucou");
+    // return new Response();
+
+    return $this->render('test/index.html.twig', [
+      'username' => 'Holie'
+    ]);
+
   }
 }
 
