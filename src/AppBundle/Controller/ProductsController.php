@@ -20,6 +20,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ProductsController extends Controller{
 
+  const PRODUCTS_TEST = [
+    ['id' => 1, 'reference' => 'AFR-1'],
+    ['id' => 2, 'reference' => 'AFR-2'],
+    ['id' => 3, 'reference' => 'AFR-3'],
+    ['id' => 4, 'reference' => 'AFR-4']
+  ];
+
+
   /**
    *
    * @Route("/products"),
@@ -27,7 +35,7 @@ class ProductsController extends Controller{
    *
    */
   public function indexAction(){
-    return new Response("afficher la liste des produits");
+    return $this->json(self::PRODUCTS_TEST);
   }
 
 
@@ -38,7 +46,12 @@ class ProductsController extends Controller{
    *
    */
   public function showAction($id){
-    return new Response("afficher le produit numéro : ".$id);
+    foreach(self::PRODUCTS_TEST as $product){
+      if($product['id'] === (int)$id){
+        return $this->json($product);
+      }
+    }
+    return $this->json(['error' => 'Product '.$id." not found"]);
   }
 
   /**
