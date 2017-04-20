@@ -18,16 +18,30 @@ class TestController extends Controller{
 
   /**
    *
-   * @route("/test", name="test")
+   * @Route("/test/{username}",
+   * name="test",
+   * requirements={"username": "\D+"})
    *
    */
-  public function indexAction(Request $request){
+  public function indexAction(Request $request, $username = "Holie"){
     // return new Response();
 
     return $this->render('test/index.html.twig', [
-      'username' => 'Holie'
+      'username' => $username
     ]);
 
+  }
+
+
+  /**
+   *
+   * @Route("/test/{page}",
+   * name="test_show",
+   * requirements={"page": "\d+"})
+   *
+   */
+  public function showAction($page){
+    return new Response("Ma page est ".$page);
   }
 }
 
