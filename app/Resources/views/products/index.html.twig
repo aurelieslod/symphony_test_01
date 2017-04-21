@@ -1,5 +1,10 @@
 {% for product in products %}
 <p>{{product.id}}</p>
 <p>{{product.reference}}</p>
+
+
+<a href="{{path('show' , {"id":product.id})}}">Voir</a>
+<a href="{{path('edit', {"id":product.id})}}">Edit</a>
+
 {% if not loop.last %}<hr>{% endif %}
 {% endfor %}

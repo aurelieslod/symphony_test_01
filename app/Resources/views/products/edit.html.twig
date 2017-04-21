@@ -1,0 +1,12 @@
+<h1>Editer le produit n° {{product.id}}</h1>
+
+<form  action="{{path("edit", {"id":product.id})}}" method="post">
+
+  <input type="hidden" name="_method" value="PATCH">
+  <label for="reference">Référence : </label>
+  <input type="text" name="reference" value="">
+  <input type="submit" name="submit" value="submit">
+
+</form>
+
+<a href="{{path('index')}}">Retour</a>

@@ -35,7 +35,9 @@ class ProductsController extends Controller{
    * defaults={"_format": "html"},
    * requirements={
    *  "_format": "html|json"
-   *  }),
+   *  },
+   *  name="index"
+   *  )
    * @Method("GET")
    *
    */
@@ -56,8 +58,11 @@ class ProductsController extends Controller{
    * @Route("/products/{id}.{_format}",
    * defaults={"_format": "html"},
    * requirements={
-   *  "_format": "html|json"
-   * }),
+   *  "_format": "html|json",
+   *  "id": "\d+"
+   * },
+   * name="show"
+   * )
    * @Method("GET")
    *
    */
@@ -80,22 +85,46 @@ class ProductsController extends Controller{
 
   /**
    *
-   * @Route("/products/{id}"),
-   * @Method({"PUT", "PATCH", "GET"})
+   * @Route("/products/{id}/edit",
+   * name = "edit"
+   * )
+   *
+   * @Method({"GET" ,"PUT", "PATCH"})
    *
    */
-  public function editAction($id){
+  public function editAction(Request $request, int $id){
+    if($request->getRealMethod() === 'GET'){
+      foreach(self::PRODUCTS_TEST as $product){
+        if($product['id'] === $id){
+          return $this->render("products/edit.html.twig", [
+            'product' => $product
+          ]);
+        }
+      }
+    }else if($request->getRealMethod() === 'PATCH'){
+      return new Response("Change in BDD");
+    }
+
+
+
     return new Response("editer le produit numéro : ".$id." dans la base de données");
   }
 
   /**
    *
-   * @Route("/products"),
-   * @Method("POST")
+   * @Route("/products/create",
+   * name="create"
+   * ),
+   * @Method({"GET", "POST"})
    *
    */
-  public function createAction(){
-    return new Response("créer un nouveau produit");
+  public function createAction(Request $request){
+    if($request->getRealMethod() === 'GET'){
+      return $this->render("products/create.html.twig");
+    }else{
+      return new Response("nouveau produit créé dans la base de données");
+    }
+
   }
 
   /**
