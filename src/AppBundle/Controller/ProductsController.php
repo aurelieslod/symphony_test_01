@@ -30,25 +30,49 @@ class ProductsController extends Controller{
 
   /**
    *
-   * @Route("/products"),
+   * @Route(
+   * "/products.{_format}",
+   * defaults={"_format": "html"},
+   * requirements={
+   *  "_format": "html|json"
+   *  }),
    * @Method("GET")
    *
    */
-  public function indexAction(){
-    return $this->json(self::PRODUCTS_TEST);
+  public function indexAction(Request $request){
+    switch ($request->getRequestFormat()){
+      case "json":
+        return $this->json(self::PRODUCTS_TEST);
+      case "html":
+        return $this->render("products/index.html.twig", [
+          'products' => self::PRODUCTS_TEST,
+        ]);
+    }
   }
 
 
   /**
    *
-   * @Route("/products/{id}"),
+   * @Route("/products/{id}.{_format}",
+   * defaults={"_format": "html"},
+   * requirements={
+   *  "_format": "html|json"
+   * }),
    * @Method("GET")
    *
    */
-  public function showAction($id){
+  public function showAction(int $id, Request $request){
     foreach(self::PRODUCTS_TEST as $product){
-      if($product['id'] === (int)$id){
-        return $this->json($product);
+      if($product['id'] === $id){
+        switch($request->getRequestFormat()){
+          case "json" :
+            return $this->json($product);
+          case "html":
+            return $this->render("products/show.html.twig", [
+              'product' => $product,
+              //compact('product') equivaut à ['product' => $product]
+            ]);
+        }
       }
     }
     return $this->json(['error' => 'Product '.$id." not found"]);
@@ -57,11 +81,11 @@ class ProductsController extends Controller{
   /**
    *
    * @Route("/products/{id}"),
-   * @Method({"PUT", "PATCH"})
+   * @Method({"PUT", "PATCH", "GET"})
    *
    */
   public function editAction($id){
-    return new Response("editer le produit numéro : ".$id);
+    return new Response("editer le produit numéro : ".$id." dans la base de données");
   }
 
   /**

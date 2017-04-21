@@ -1,0 +1,5 @@
+{% for product in products %}
+<p>{{product.id}}</p>
+<p>{{product.reference}}</p>
+{% if not loop.last %}<hr>{% endif %}
+{% endfor %}
