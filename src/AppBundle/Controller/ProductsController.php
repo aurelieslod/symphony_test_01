@@ -16,11 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
 // controller class mère : méthode render()
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-
-
-class ProductsController extends Controller{
-
-  const PRODUCTS_TEST = [
+class ProductsController extends Controller
+{
+    const PRODUCTS_TEST = [
     ['id' => 1, 'reference' => 'AFR-1'],
     ['id' => 2, 'reference' => 'AFR-2'],
     ['id' => 3, 'reference' => 'AFR-3'],
@@ -41,8 +39,9 @@ class ProductsController extends Controller{
    * @Method("GET")
    *
    */
-  public function indexAction(Request $request){
-    switch ($request->getRequestFormat()){
+  public function indexAction(Request $request)
+  {
+      switch ($request->getRequestFormat()) {
       case "json":
         return $this->json(self::PRODUCTS_TEST);
       case "html":
@@ -66,11 +65,12 @@ class ProductsController extends Controller{
    * @Method("GET")
    *
    */
-  public function showAction(int $id, Request $request){
-    foreach(self::PRODUCTS_TEST as $product){
-      if($product['id'] === $id){
-        switch($request->getRequestFormat()){
-          case "json" :
+  public function showAction(int $id, Request $request)
+  {
+      foreach (self::PRODUCTS_TEST as $product) {
+          if ($product['id'] === $id) {
+              switch ($request->getRequestFormat()) {
+          case "json":
             return $this->json($product);
           case "html":
             return $this->render("products/show.html.twig", [
@@ -78,9 +78,9 @@ class ProductsController extends Controller{
               //compact('product') equivaut à ['product' => $product]
             ]);
         }
+          }
       }
-    }
-    return $this->json(['error' => 'Product '.$id." not found"]);
+      return $this->json(['error' => 'Product '.$id." not found"]);
   }
 
   /**
@@ -92,52 +92,63 @@ class ProductsController extends Controller{
    * @Method({"GET" ,"PUT", "PATCH"})
    *
    */
-  public function editAction(Request $request, int $id){
-    if($request->getRealMethod() === 'GET'){
-      foreach(self::PRODUCTS_TEST as $product){
-        if($product['id'] === $id){
-          return $this->render("products/edit.html.twig", [
+  public function editAction(Request $request, int $id)
+  {
+      if ($request->getMethod() === 'GET') {
+          foreach (self::PRODUCTS_TEST as $product) {
+              if ($product['id'] === $id) {
+                  return $this->render("products/edit.html.twig", [
             'product' => $product
           ]);
-        }
+              }
+          }
+      } elseif ($request->getMethod() === 'PATCH') {
+          return new Response("Change in BDD");
       }
-    }else if($request->getRealMethod() === 'PATCH'){
-      return new Response("Change in BDD");
-    }
 
 
 
-    return new Response("editer le produit numéro : ".$id." dans la base de données");
+      return new Response("editer le produit numéro : ".$id." dans la base de données");
   }
 
   /**
    *
    * @Route("/products/create",
    * name="create"
-   * ),
+   * )
    * @Method({"GET", "POST"})
    *
    */
-  public function createAction(Request $request){
-    if($request->getRealMethod() === 'GET'){
-      return $this->render("products/create.html.twig");
-    }else{
-      return new Response("nouveau produit créé dans la base de données");
-    }
-
+  public function createAction(Request $request)
+  {
+      if ($request->getMethod() === 'GET') {
+          return $this->render("products/create.html.twig");
+      } else {
+          // return new Response("nouveau produit créé dans la base de données");
+      return $this->redirectToRoute("index");
+      }
   }
 
   /**
    *
-   * @Route("/products/{id}"),
-   * @Method("DELETE")
+   * @Route("/products/{id}/delete",
+   * name="delete"
+   * )
+   * @Method({"DELETE", "GET"})
    *
    */
-  public function deleteAction($id){
-    return new Response("supprimer le produit numéro : ".$id);
+  public function deleteAction(Request $request, int $id)
+  {
+      if ($request->getMethod() === 'GET') {
+          foreach (self::PRODUCTS_TEST as $product) {
+              if ($product['id'] === $id) {
+                  return $this->render("products/delete.html.twig", [
+          'product' => $product
+        ]);
+              }
+          }
+      } elseif ($request->getMethod() === 'DELETE') {
+          return new Response("Le produit numéro : ".$id." a été supprimé");
+      }
   }
-
 }
-
-
- ?>

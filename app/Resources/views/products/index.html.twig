@@ -5,6 +5,7 @@
 
 <a href="{{path('show' , {"id":product.id})}}">Voir</a>
 <a href="{{path('edit', {"id":product.id})}}">Edit</a>
+<a href="{{path('delete', {"id":product.id})}}">Delete</a>
 
 {% if not loop.last %}<hr>{% endif %}
 {% endfor %}
