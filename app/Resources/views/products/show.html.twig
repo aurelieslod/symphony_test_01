@@ -1,6 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 <h1>Produit n° {{product.id}}</h1>
 
 <p>Produit n° {{product.id}}</p>
 <p>Référence : {{product.reference}}</p>
 
-<a href="{{path('index')}}">Retour</a>
+<a href="{{path('app_products_index')}}">Retour</a>
+
+{% endblock %}

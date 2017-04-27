@@ -1,11 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+{% for message in app.session.flashBag.get('message') %}
+    <div class="flash-message">
+        {{ message }}
+    </div>
+{% endfor %}
+
 {% for product in products %}
 <p>{{product.id}}</p>
 <p>{{product.reference}}</p>
 
 
-<a href="{{path('show' , {"id":product.id})}}">Voir</a>
-<a href="{{path('edit', {"id":product.id})}}">Edit</a>
-<a href="{{path('delete', {"id":product.id})}}">Delete</a>
+
+
+<a href="{{path('app_products_show' , {"id":product.id})}}">Voir</a>
+<a href="{{path('app_products_edit', {"id":product.id})}}">Edit</a>
+<a href="{{path('app_products_delete', {"id":product.id})}}">Delete</a>
 
 {% if not loop.last %}<hr>{% endif %}
 {% endfor %}
+
+{% endblock %}

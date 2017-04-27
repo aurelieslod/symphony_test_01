@@ -1,6 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 <h1>Editer le produit n° {{product.id}}</h1>
 
-<form  action="{{path("edit", {"id":product.id})}}" method="post">
+<form  action="" method="post">
 
   <input type="hidden" name="_method" value="PATCH">
   <label for="reference">Référence : </label>
@@ -9,4 +13,6 @@
 
 </form>
 
-<a href="{{path('index')}}">Retour</a>
+<a href="{{path('app_products_index')}}">Retour</a>
+
+{% endblock %}

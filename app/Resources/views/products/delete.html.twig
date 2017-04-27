@@ -1,11 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 <h1>Supprimer le produit n° {{product.id}}</h1>
 
 
-<form  action="{{path("delete", {"id":product.id})}}" onsubmit="return confirm('Etes-vous sur ?')" method="post">
+<form  action="" onsubmit="return confirm('Etes-vous sur ?')" method="post">
 
   <input type="hidden" name="_method" value="DELETE">
   <input type="submit" name="submit" value="Delete">
 
 </form>
 
-<a href="{{path('index')}}">Retour</a>
+<a href="{{path('app_products_index')}}">Retour</a>
+
+{% endblock %}

@@ -33,8 +33,7 @@ class ProductsController extends Controller
    * defaults={"_format": "html"},
    * requirements={
    *  "_format": "html|json"
-   *  },
-   *  name="index"
+   *  }
    *  )
    * @Method("GET")
    *
@@ -59,8 +58,7 @@ class ProductsController extends Controller
    * requirements={
    *  "_format": "html|json",
    *  "id": "\d+"
-   * },
-   * name="show"
+   * }
    * )
    * @Method("GET")
    *
@@ -85,8 +83,7 @@ class ProductsController extends Controller
 
   /**
    *
-   * @Route("/products/{id}/edit",
-   * name = "edit"
+   * @Route("/products/{id}/edit"
    * )
    *
    * @Method({"GET" ,"PUT", "PATCH"})
@@ -103,7 +100,11 @@ class ProductsController extends Controller
               }
           }
       } elseif ($request->getMethod() === 'PATCH') {
-          return new Response("Change in BDD");
+        $this->addFlash(
+         'message',
+         'Product change !'
+        );
+        return $this->redirectToRoute('app_products_index');
       }
 
 
@@ -113,8 +114,7 @@ class ProductsController extends Controller
 
   /**
    *
-   * @Route("/products/create",
-   * name="create"
+   * @Route("/products/create"
    * )
    * @Method({"GET", "POST"})
    *
@@ -124,15 +124,18 @@ class ProductsController extends Controller
       if ($request->getMethod() === 'GET') {
           return $this->render("products/create.html.twig");
       } else {
+        $this->addFlash(
+         'message',
+         'Product create !'
+        );
+        return $this->redirectToRoute('app_products_index');
           // return new Response("nouveau produit créé dans la base de données");
-      return $this->redirectToRoute("index");
       }
   }
 
   /**
    *
-   * @Route("/products/{id}/delete",
-   * name="delete"
+   * @Route("/products/{id}/delete"
    * )
    * @Method({"DELETE", "GET"})
    *
@@ -148,7 +151,11 @@ class ProductsController extends Controller
               }
           }
       } elseif ($request->getMethod() === 'DELETE') {
-          return new Response("Le produit numéro : ".$id." a été supprimé");
+        $this->addFlash(
+         'message',
+         'Product delete !'
+        );
+        return $this->redirectToRoute('app_products_index');
       }
   }
 }
