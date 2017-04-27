@@ -114,8 +114,11 @@ class ProductsController extends Controller
 
   /**
    *
-   * @Route("/products/create"
-   * )
+   * @Route("/products/create.{_format}",
+   * defaults={"_format": "html"},
+   * requirements={
+   *  "_format": "html|json"
+   *  })
    * @Method({"GET", "POST"})
    *
    */
@@ -123,20 +126,29 @@ class ProductsController extends Controller
   {
       if ($request->getMethod() === 'GET') {
           return $this->render("products/create.html.twig");
-      } else {
-        $this->addFlash(
-         'message',
-         'Product create !'
-        );
-        return $this->redirectToRoute('app_products_index');
-          // return new Response("nouveau produit créé dans la base de données");
-      }
+      }else if($request->getMethod() === 'POST') {
+        switch($request->getRequestFormat()){
+          case "json":
+            return $this->json(['notice' => 'Votre produit a bien été créé']);
+            break;
+          case "html":
+            $this->addFlash(
+              'message',
+              'Product create !'
+            );
+            return $this->redirectToRoute('app_products_index');
+            break;
+        }
   }
-
+}
   /**
    *
-   * @Route("/products/{id}/delete"
-   * )
+   *
+   * @Route("/products/{id}/delete.{_format}",
+   * defaults={"_format": "html"},
+   * requirements={
+   *  "_format": "html|json"
+   *  })
    * @Method({"DELETE", "GET"})
    *
    */
@@ -151,11 +163,19 @@ class ProductsController extends Controller
               }
           }
       } elseif ($request->getMethod() === 'DELETE') {
-        $this->addFlash(
-         'message',
-         'Product delete !'
-        );
-        return $this->redirectToRoute('app_products_index');
+        switch($request->getRequestFormat()){
+         case "json":
+           return $this->json(['notice' => 'Votre produit a bien été supprimé']);
+           break;
+         case "html":
+           $this->addFlash(
+             'message',
+             'Product delete !'
+           );
+           return $this->redirectToRoute('app_products_index');
+           break;
+       }
+
       }
   }
 }
