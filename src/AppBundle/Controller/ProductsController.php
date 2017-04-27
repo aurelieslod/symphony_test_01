@@ -106,46 +106,36 @@ class ProductsController extends Controller
         );
         return $this->redirectToRoute('app_products_index');
       }
+
+
+
       return new Response("editer le produit numéro : ".$id." dans la base de données");
   }
 
   /**
    *
-   * @Route("/products/create.{_format}",
-   * defaults={"_format": "html"},
-   * requirements={
-   *  "_format": "html|json"
-   *  }
+   * @Route("/products/create"
    * )
    * @Method({"GET", "POST"})
    *
    */
-  public function createAction(Request $request){
+  public function createAction(Request $request)
+  {
       if ($request->getMethod() === 'GET') {
           return $this->render("products/create.html.twig");
-      }else if($request->getMethod() === 'POST') {
-        switch($request->getRequestFormat()){
-          case "json":
-            return $this->json(['notice' => 'Votre produit a bien été créé']);
-            break;
-          case "html":
-            $this->addFlash(
-              'message',
-              'Product create !'
-            );
-            return $this->redirectToRoute('app_products_index');
-            break;
-        }
+      } else {
+        $this->addFlash(
+         'message',
+         'Product create !'
+        );
+        return $this->redirectToRoute('app_products_index');
+          // return new Response("nouveau produit créé dans la base de données");
       }
   }
 
   /**
    *
-   * @Route("/products/{id}/delete.{_format}",
-   * defaults={"_format": "html"},
-   * requirements={
-   *  "_format": "html|json"
-   *  }
+   * @Route("/products/{id}/delete"
    * )
    * @Method({"DELETE", "GET"})
    *
@@ -161,18 +151,11 @@ class ProductsController extends Controller
               }
           }
       } elseif ($request->getMethod() === 'DELETE') {
-        switch($request->getRequestFormat()){
-          case "json":
-            return $this->json(['notice' => 'Votre produit a bien été créé']);
-            break;
-          case "html":
-            $this->addFlash(
-              'message',
-              'Product create !'
-            );
-            return $this->redirectToRoute('app_products_index');
-            break;
-        }
+        $this->addFlash(
+         'message',
+         'Product delete !'
+        );
+        return $this->redirectToRoute('app_products_index');
       }
   }
 }
