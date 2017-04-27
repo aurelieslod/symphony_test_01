@@ -5,10 +5,14 @@
 <h1>Products</h1>
 
 {% for message in app.session.flashBag.get('message') %}
-    <div class="flash-message">
+    <div class="alert alert-success">
         {{ message }}
     </div>
 {% endfor %}
+
+<div style="display : none" class="alert alert-success">
+  <p></p>
+</div>
 
 <a href="{{path('app_products_create')}}">Crate product</a>
 
@@ -28,7 +32,8 @@
     <td> {{product.reference}} </td>
     <td> <a href="{{path('app_products_show' , {"id":product.id})}}">Voir</a> </td>
     <td> <a href="{{path('app_products_edit', {"id":product.id})}}">Edit</a> </td>
-    <td> <a href="{{path('app_products_delete', {"id":product.id})}}">Delete</a> </td>
+    <!-- <td> <a href="{{path('app_products_delete', {"id":product.id})}}">Delete</a> </td> -->
+    <td> <button onClick="deleteProduct({{product.id}})">Supprimer</button></td>
   </tr>
   {% endfor %}
 </table>

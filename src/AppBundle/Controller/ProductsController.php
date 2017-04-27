@@ -19,10 +19,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ProductsController extends Controller
 {
     const PRODUCTS_TEST = [
-    ['id' => 1, 'reference' => 'AFR-1'],
-    ['id' => 2, 'reference' => 'AFR-2'],
-    ['id' => 3, 'reference' => 'AFR-3'],
-    ['id' => 4, 'reference' => 'AFR-4']
+    ['id' => 1, 'reference' => 'Bonjour'],
+    ['id' => 2, 'reference' => 'Ca va ?'],
+    ['id' => 3, 'reference' => 'Hahaha'],
+    ['id' => 4, 'reference' => 'lol']
   ];
 
 

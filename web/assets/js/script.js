@@ -1,10 +1,23 @@
-$.ajax ({
 
-  url: '/products/1/delete.json',
-  method: 'DELETE'
 
-}).done(function(data) {
+function deleteProduct(id){
+  $.ajax ({
 
-  console.log(data);
+    url: '/products/' + id + '/delete.json',
+    method: 'DELETE'
 
-});
+  }).done(function(data){
+    console.log(data.notice);
+
+    $('.alert.alert-success').show({
+      duration : 1000,
+      complete : function(){
+        $(this).hide({
+          duration : 1000
+        });
+      }
+    })
+    $('.alert.alert-success p').text(data.notice);
+  });
+
+}
