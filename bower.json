@@ -1,0 +1,21 @@
+{
+  "name": "simplon_project",
+  "homepage": "https://github.com/aurelieslod/symphony_test_01",
+  "authors": [
+    "aurelieslod <aurelie.slod@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

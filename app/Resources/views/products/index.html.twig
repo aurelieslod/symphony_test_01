@@ -14,22 +14,24 @@
   <p></p>
 </div>
 
-<a href="{{path('app_products_create')}}">Crate product</a>
+<a href="{{path('app_products_create')}}">Create product</a>
 
 
 <table class="table table-bordered table-striped">
   <tr>
     <th>id</th>
     <th>reference</th>
+    <th>price</th>
     <th>show</th>
     <th>edit</th>
     <th>delete</th>
   </tr>
 
     {% for product in products %}
-  <tr>
+  <tr id="product-{{product.id}}">
     <td> {{product.id}} </td>
     <td> {{product.reference}} </td>
+    <td> {{product.price}} </td>
     <td> <a href="{{path('app_products_show' , {"id":product.id})}}">Voir</a> </td>
     <td> <a href="{{path('app_products_edit', {"id":product.id})}}">Edit</a> </td>
     <!-- <td> <a href="{{path('app_products_delete', {"id":product.id})}}">Delete</a> </td> -->

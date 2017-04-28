@@ -16,14 +16,17 @@ use Symfony\Component\HttpFoundation\Response;
 // controller class mère : méthode render()
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+
+use AppBundle\Entity\Product;
+
 class ProductsController extends Controller
 {
-    const PRODUCTS_TEST = [
-    ['id' => 1, 'reference' => 'Bonjour'],
-    ['id' => 2, 'reference' => 'Ca va ?'],
-    ['id' => 3, 'reference' => 'Hahaha'],
-    ['id' => 4, 'reference' => 'lol']
-  ];
+    //   const PRODUCTS_TEST = [
+  //   ['id' => 1, 'reference' => 'Bonjour'],
+  //   ['id' => 2, 'reference' => 'Ca va ?'],
+  //   ['id' => 3, 'reference' => 'Hahaha'],
+  //   ['id' => 4, 'reference' => 'lol']
+  // ];
 
 
   /**
@@ -40,16 +43,19 @@ class ProductsController extends Controller
    */
   public function indexAction(Request $request)
   {
+      $products = $this->getDoctrine()
+      ->getRepository('AppBundle:Product')
+      ->findAll();
+
+
       switch ($request->getRequestFormat()) {
       case "json":
-        return $this->json(self::PRODUCTS_TEST);
+        return $this->json($products);
       case "html":
-        return $this->render("products/index.html.twig", [
-          'products' => self::PRODUCTS_TEST,
-        ]);
+        return $this->render("products/index.html.twig", compact('products'));
     }
   }
-
+ // compact('product') =['product' => $product]
 
   /**
    *
@@ -65,19 +71,21 @@ class ProductsController extends Controller
    */
   public function showAction(int $id, Request $request)
   {
-      foreach (self::PRODUCTS_TEST as $product) {
-          if ($product['id'] === $id) {
-              switch ($request->getRequestFormat()) {
+      $product = $this->getDoctrine()
+        ->getRepository('AppBundle:Product')
+        ->find($id);
+
+      switch ($request->getRequestFormat()) {
           case "json":
             return $this->json($product);
           case "html":
-            return $this->render("products/show.html.twig", [
-              'product' => $product,
+            return $this->render("products/show.html.twig", compact('product')
+
               //compact('product') equivaut à ['product' => $product]
-            ]);
+            );
         }
-          }
-      }
+
+
       return $this->json(['error' => 'Product '.$id." not found"]);
   }
 
@@ -91,20 +99,32 @@ class ProductsController extends Controller
    */
   public function editAction(Request $request, int $id)
   {
+
+    $product = $this->getDoctrine()
+      ->getRepository('AppBundle:Product')
+      ->find($id);
+
       if ($request->getMethod() === 'GET') {
-          foreach (self::PRODUCTS_TEST as $product) {
-              if ($product['id'] === $id) {
-                  return $this->render("products/edit.html.twig", [
-            'product' => $product
-          ]);
-              }
-          }
-      } elseif ($request->getMethod() === 'PATCH') {
-        $this->addFlash(
+              if ($product) {
+                  return $this->render("products/edit.html.twig", compact('product'));
+        }else {
+          throw $this->createNotFoundException('product not found');
+        }
+      } elseif ($request->getMethod() === 'PATCH' || 'PUT') {
+        $reference = $request->request->get('reference');
+        $price = $request->request->get('price');
+
+        $product->setReference($reference);
+        $product->setPrice($price);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+          $this->addFlash(
          'message',
          'Product change !'
         );
-        return $this->redirectToRoute('app_products_index');
+          return $this->redirectToRoute('app_products_index');
       }
 
 
@@ -126,8 +146,20 @@ class ProductsController extends Controller
   {
       if ($request->getMethod() === 'GET') {
           return $this->render("products/create.html.twig");
-      }else if($request->getMethod() === 'POST') {
-        switch($request->getRequestFormat()){
+      } elseif ($request->getMethod() === 'POST') {
+          $reference = $request->request->get('reference');
+          $price = $request->request->get('price');
+
+          $product = new Product();
+          $product->setReference($reference);
+          $product->setPrice($price);
+
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($product);
+          $em->flush();
+
+
+          switch ($request->getRequestFormat()) {
           case "json":
             return $this->json(['notice' => 'Votre produit a bien été créé']);
             break;
@@ -138,9 +170,10 @@ class ProductsController extends Controller
             );
             return $this->redirectToRoute('app_products_index');
             break;
-        }
+          }
+      }
   }
-}
+
   /**
    *
    *
@@ -154,28 +187,30 @@ class ProductsController extends Controller
    */
   public function deleteAction(Request $request, int $id)
   {
-      if ($request->getMethod() === 'GET') {
-          foreach (self::PRODUCTS_TEST as $product) {
-              if ($product['id'] === $id) {
-                  return $this->render("products/delete.html.twig", [
-          'product' => $product
-        ]);
-              }
-          }
-      } elseif ($request->getMethod() === 'DELETE') {
-        switch($request->getRequestFormat()){
+
+
+          $entity = $this->getDoctrine()
+          ->getEntityManager();
+
+          $product = $entity->getRepository('AppBundle:Product')
+          ->find($id);
+
+          $entity->remove($product);
+          $entity->flush();
+          switch ($request->getRequestFormat()) {
          case "json":
-           return $this->json(['notice' => 'Votre produit a bien été supprimé']);
-           break;
+          if($product){
+            return $this->json(['notice' => 'Votre produit a bien été supprimé']);
+          }
          case "html":
-           $this->addFlash(
-             'message',
-             'Product delete !'
-           );
-           return $this->redirectToRoute('app_products_index');
-           break;
+          if($product){
+            $this->addFlash(
+              'message',
+              'Product delete !'
+            );
+            return $this->redirectToRoute('app_products_index');
+          }
        }
 
-      }
   }
 }

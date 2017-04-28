@@ -2,15 +2,15 @@
 
 {% block body %}
 
-<form  action="{{path("app_products_create")}}" method="post">
+<form class="well"  action="{{path("app_products_create")}}" method="post">
   <label for="reference">Référence : </label>
   <input type="text" name="reference" value="">
 
-  <label for="id">Id : </label>
-  <input type="text" name="id" value="">
+  <label for="id">Price : </label>
+  <input type="text" name="price" value="">
 
   <input type="submit" name="submit" value="submit">
 
 </form>
-<a href="{{path('app_products_index')}}">Retour</a> 
+<a href="{{path('app_products_index')}}">Retour</a>
 {% endblock %}

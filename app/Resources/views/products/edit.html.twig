@@ -4,11 +4,15 @@
 
 <h1>Editer le produit n° {{product.id}}</h1>
 
-<form  action="" method="post">
+<form  class="well" action="" method="post">
 
   <input type="hidden" name="_method" value="PATCH">
   <label for="reference">Référence : </label>
-  <input type="text" name="reference" value="">
+  <input type="text" name="reference"  value"{{product.reference}}">
+
+  <label for="price">Price : </label>
+  <input type="text" name="price"  value"{{product.price}}">
+
   <input type="submit" name="submit" value="submit">
 
 </form>

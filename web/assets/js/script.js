@@ -8,7 +8,7 @@ function deleteProduct(id){
 
   }).done(function(data){
     console.log(data.notice);
-
+    $('#product-'+id).remove();
     $('.alert.alert-success').show({
       duration : 1000,
       complete : function(){
