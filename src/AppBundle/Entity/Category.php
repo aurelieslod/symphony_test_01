@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -24,6 +24,18 @@ class Category{
    *
    */
   private $designation;
+
+
+  /**
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="category")
+     */
+  private $products;
+  
+  public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -57,5 +69,39 @@ class Category{
     public function getDesignation()
     {
         return $this->designation;
+    }
+
+    /**
+     * Add product
+     *
+     * @param \AppBundle\Entity\Product $product
+     *
+     * @return Category
+     */
+    public function addProduct(\AppBundle\Entity\Product $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product
+     *
+     * @param \AppBundle\Entity\Product $product
+     */
+    public function removeProduct(\AppBundle\Entity\Product $product)
+    {
+        $this->products->removeElement($product);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 }
